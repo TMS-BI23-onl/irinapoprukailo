@@ -1,0 +1,57 @@
+--1)
+SELECT Color, AVG(StandardCost) AS avg_price
+FROM Production.Product
+GROUP BY Color
+HAVING COUNT(Color)>=40 
+
+--2 rows
+
+--2)
+SELECT City, COUNT(City) AS Population
+FROM [Person].[Address]
+GROUP BY City
+ORDER BY City 
+
+--575 rows
+
+--3)
+SELECT TOP 5 WITH TIES [ProductID],SUM([Quantity]) AS quant_cnt
+FROM [Production].[ProductInventory]
+GROUP BY [ProductID] 
+ORDER BY quant_cnt DESC 
+
+--5 rows
+
+4)
+SELECT [ProductReviewID]
+FROM [Production].[ProductReview]
+WHERE [Rating]>(SELECT AVG([Rating]) 
+                FROM [Production].[ProductReview]) 
+
+--2 rows
+
+--5)
+SELECT *
+FROM [Purchasing].[ShipMethod]
+WHERE [ShipRate]>(SELECT MIN([ListPrice])
+                  FROM [Production].[Product]
+				  WHERE [ListPrice] IS NOT NULL) 
+
+--5 rows
+
+--6)
+SELECT [BusinessEntityID]
+FROM [Person].[Person]
+EXCEPT
+SELECT [BusinessEntityID]
+FROM [Sales].[PersonCreditCard] 
+
+--854 rows
+
+SELECT [BusinessEntityID]
+FROM [Person].[Person]
+WHERE [BusinessEntityID] NOT IN
+      (SELECT [BusinessEntityID]
+	   FROM [Sales].[PersonCreditCard]) 
+
+--854 rows
