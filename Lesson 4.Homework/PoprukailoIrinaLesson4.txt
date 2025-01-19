@@ -1,0 +1,66 @@
+--1)
+SELECT [ProductID],
+        CASE WHEN [StandardCost] = 0
+		          OR [StandardCost] IS NULL
+			      THEN 'Not for sale'
+		     WHEN [StandardCost] > 0 
+			      AND [StandardCost] < 100
+				  THEN '<$100'
+			 WHEN [StandardCost] >= 100
+			      AND [StandardCost] < 500
+				  THEN '<$500'
+			 WHEN [StandardCost] >= 500
+			      THEN '>=$500'
+		END AS PriceRange
+FROM [Production].[Product]
+
+--504 rows
+
+--2)
+SELECT pprv.[ProductID], pprv.[BusinessEntityID], pv.[Name]
+FROM [Purchasing].[ProductVendor] pprv
+     JOIN [Purchasing].[Vendor] pv
+	 ON pprv.[BusinessEntityID] = pv.[BusinessEntityID]
+WHERE pv.[Name] LIKE '%X%'
+      OR pv.[Name] LIKE'N%' 
+
+-- 36 rows
+
+--3)
+SELECT pv.[Name], pv.[BusinessEntityID]
+FROM [Purchasing].[Vendor] pv
+     LEFT JOIN [Purchasing].[ProductVendor] pprv
+	 ON pv.[BusinessEntityID]=pprv.[BusinessEntityID]
+WHERE pprv.[BusinessEntityID] IS NULL 
+
+--18 rows
+
+--4)
+SELECT pp.[Name],pp.[StandardCost], ppm.[Name]
+FROM [Production].[Product] pp
+     JOIN [Production].[ProductModel] ppm
+	 ON pp.[ProductModelID]=ppm.[ProductModelID]
+WHERE ppm.[Name] LIKE 'LL%' 
+
+--50 rows
+
+--5) Not succeded, returns 0 rows
+SELECT pv.[Name] as vendor_name,ss.[Name] as name_store
+FROM [Purchasing].[Vendor] pv
+     JOIN [Person].[BusinessEntity] pbe
+	 ON pv.[BusinessEntityID]=pbe.[BusinessEntityID]
+	 JOIN [Sales].[Store] ss
+	 ON pbe.[BusinessEntityID]=ss.[BusinessEntityID]
+ORDER BY pv.[Name]
+
+--6)
+SELECT pp.[Name], COUNT(so.[SpecialOfferID]) as Num_Offers
+FROM [Production].[Product] pp
+     JOIN [Sales].[SpecialOfferProduct] sop
+	 ON pp.[ProductID]=sop.[ProductID]
+	 JOIN [Sales].[SpecialOffer] so
+	 ON sop.[SpecialOfferID]=so.[SpecialOfferID]
+GROUP BY pp.[Name]
+HAVING COUNT(so.[SpecialOfferID])>1 
+
+--147 rows
