@@ -1,0 +1,43 @@
+3.
+a) SELECT *
+FROM [Production].[UnitMeasure] 
+WHERE [UnitMeasureCode] LIKE 'T%'
+--0 rows
+
+SELECT DISTINCT [UnitMeasureCode]
+FROM [Production].[UnitMeasure]
+--38 rows
+
+INSERT INTO [Production].[UnitMeasure] ([UnitMeasureCode],[Name],[ModifiedDate])
+VALUES ('TT1', 'Test 1','2020-09-09'),
+       ('TT2', 'Test 2', GETDATE())
+
+SELECT DISTINCT [UnitMeasureCode]
+FROM [Production].[UnitMeasure]
+WHERE [UnitMeasureCode] LIKE 'T%'
+--2 rows
+
+b) SELECT [UnitMeasureCode], [Name], [ModifiedDate]
+INTO [Production].[UnitMeasureTest]
+FROM [Production].[UnitMeasure]
+WHERE [UnitMeasureCode] LIKE 'T%'
+      OR [UnitMeasureCode] LIKE 'CAN'
+
+SELECT *
+FROM [Production].[UnitMeasureTest]
+--3 rows
+
+c) UPDATE [Production].[UnitMeasureTest]
+SET [UnitMeasureCode] = 'TTT'
+--3 rows
+
+d) DELETE
+FROM [Production].[UnitMeasureTest]
+--0 rows
+
+4.
+1) COUNT(1) - 4
+2) COUNT(Name) - 2
+3) COUNT(Id) - 3
+4) COUNT(*) - 4
+
