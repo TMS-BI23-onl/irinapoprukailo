@@ -1,0 +1,25 @@
+1. In case where all of values are unique.
+
+2. 
+a) SELECT [SalesOrderID], MAX ([LineTotal]) OVER (PARTITION BY [SalesOrderID]) AS max_total, 
+                          MIN ([LineTotal]) OVER (PARTITION BY [SalesOrderID]) AS min_total, 
+		          AVG ([LineTotal]) OVER (PARTITION BY [SalesOrderID]) AS avg_total
+   FROM [Sales].[SalesOrderDetail]
+   WHERE [SalesOrderID] IN (43659, 43664)
+   ORDER BY 1
+--20 rows
+
+b) 1st place this year - Pamela Ansman-Wolfe
+   1st plase last year - Tete Mensa-Annan
+SELECT CONCAT(p.[FirstName],' ',p.[LastName]) AS "Name",
+       CONCAT(UPPER(LEFT(p.[LastName],3)),'login',t.[Group]) AS "login",
+       RANK() OVER (ORDER BY s.[SalesYTD]) AS "Rank",
+	   RANK() OVER (ORDER BY s.[SalesLastYear]) AS RankLastYear
+FROM [Sales].[SalesPerson] s
+     JOIN [Sales].[SalesTerritory] t ON s.[TerritoryID]=t.[TerritoryID]
+	 JOIN [HumanResources].[Employee] e ON s.[BusinessEntityID]=e.[BusinessEntityID]
+	 JOIN [Person].[Person] p ON p.[BusinessEntityID]=e.[BusinessEntityID]
+ORDER BY RANK() OVER (ORDER BY s.[SalesYTD])
+--14 rows
+
+c) Not succeeded in finding the solution.
