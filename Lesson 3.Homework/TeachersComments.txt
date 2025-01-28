@@ -1,0 +1,10 @@
+Well done!
+
+1
+Do not use count by color. We already know that Color is null for pretty much half of the table. Never use COUNT bu columns that can be NULL. Only PK or 1.
+
+2
+The same error. + ORDER is not asled for.
+
+5
+The price in the subquery should be >0, not NOT NULL.
