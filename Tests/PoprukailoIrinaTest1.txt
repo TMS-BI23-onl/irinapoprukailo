@@ -1,0 +1,19 @@
+1) SELECT *
+   FROM Drivers
+   WHERE Driving_Exp NOT IN ('3','5','6','10')
+                            AND Place_Registration LIKE 'eee'
+
+2) SELECT d.num_passport
+   FROM Drivers d
+        LEFT JOIN DispatcherOffice do ON d.DriverID=do.DriverID
+   WHERE do.Trip IS NULL
+
+3) SELECT c.RegNumber, 
+          do.ArrivalTime, 
+          do.DepartureTime, 
+          r.Destination
+   FROM Cars c
+        JOIN DispatcherOffice do ON c.CarID=do.CarID
+        JOIN Route r ON r.RouteID=do.Trip
+   WHERE c.ManufactureYear = '2015'
+        
