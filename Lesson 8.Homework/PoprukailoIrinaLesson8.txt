@@ -1,0 +1,16 @@
+2) There are 10 procedures + System Stored Procedures.
+   We're apble to find them via pace:
+   - Databases -> AdventureWorks2017 -> Programmability -> Stored Procedures
+Among them uspUpdateEmployeeHireInfo, uspUpdateEmployeeLogin,uspUpdateEmployeePersonalInfo and more.
+
+3) CREATE PROCEDURE UpdNationalIDNumber
+    @NationalIDNumber INT,
+    @BusinessEntityID INT
+    AS 
+      BEGIN UPDATE [HumanResources].[Employee]
+            SET [NationalIDNumber]=@NationalIDNumber
+            WHERE [BusinessEntityID]=@BusinessEntityID
+      END
+
+EXEC dbo.UpdNationalIDNumber @NationalIDNumber = 879341111, 
+                             @BusinessEntityID = 15
