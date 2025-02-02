@@ -1,0 +1,66 @@
+6) CREATE TABLE Patients
+(
+      ID INT IDENTITY (1, 1),
+      FirstName CHAR(100),
+      LastName NVARCHAR(100),
+      SSN INT PRIMARY KEY,
+      Email AS CONCAT(LEFT(UPPER(FirstName),1),LOWER(LEFT(LastName,3)),'@mail.com'),
+      Temp FLOAT,
+      CreatedDate DATE);
+
+7)INSERT INTO Patients (FirstName,LastName,SSN,Temp)
+  VALUES
+     ('Lucky','Day','6010P','36.7'),
+     ('Sage','Optimistic','3457Z','36.6'),
+     ('Den','Ruthless','6874X','38.2'),
+     ('Zen','Bald','8597K','37.1'),
+     ('Mika','Sagacious','7485R','36.9')
+
+8)ALTER TABLE Patients
+        ADD TempType AS CASE 
+                        WHEN Temp < 37 THEN '<37°C'
+			WHEN Temp >= 37 THEN '>=37°C'
+			END
+
+9)CREATE VIEW Patients_v AS
+       SELECT Temp, (Temp*9/5+32) AS TempF 
+       FROM Patients
+
+10)CREATE FUNCTION TempCtoF (@temp FLOAT)
+       RETURNS FLOAT
+	   AS 
+	     BEGIN
+	     RETURN (@temp*9/5+32);
+	   END;
+   GO
+
+SELECT Temp, dbo.TempCtoF(Temp) AS TempF 
+FROM Patients
+
+11)
+1st option:
+
+SELECT 
+   CASE WHEN DATENAME(WEEKDAY, DATEADD(DAY, 1, EOMONTH(GETDATE()))) IN ('Суббота', 'Воскресенье') 
+        THEN 
+           CASE WHEN DATENAME(WEEKDAY, DATEADD(DAY, 1, EOMONTH(GETDATE()))) = 'Суббота' 
+                THEN DATEADD(DAY, 3, EOMONTH(GETDATE())) 
+                ELSE DATEADD(DAY, 2, EOMONTH(GETDATE())) 
+           END
+        ELSE DATEADD(DAY, 1, EOMONTH(GETDATE()))
+    END AS FirstWorkingDayNextMonth
+
+2nd option
+DECLARE @FirstDayNextMonth DATE, 
+        @FirstWorkingDay DATE;
+SET @FirstDayNextMonth = DATEADD(DAY, 1, EOMONTH(GETDATE()))
+SET @FirstWorkingDay = CASE 
+                       WHEN DATENAME(WEEKDAY, @FirstDayNextMonth) IN ('Суббота', 'Воскресенье') 
+                         THEN 
+                               CASE WHEN DATENAME(WEEKDAY, @FirstDayNextMonth) = 'Суббота' 
+                               THEN DATEADD(DAY, 3, @FirstDayNextMonth) 
+                               ELSE DATEADD(DAY, 2, @FirstDayNextMonth) 
+                         END
+		       ELSE @FirstDayNextMonth
+		       END
+SELECT @FirstWorkingDay
