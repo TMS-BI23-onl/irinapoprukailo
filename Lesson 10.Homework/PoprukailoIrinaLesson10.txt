@@ -1,0 +1,21 @@
+2) 
+CREATE TABLE Names
+(ID INT IDENTITY (1, 1),
+FirstName NVARCHAR(100),
+LastName NVARCHAR(100))
+
+INSERT INTO Names (FirstName,LastName)
+SELECT DISTINCT TOP 1000000
+      p1.[FirstName],
+	  p2.[LastName]
+      FROM [Person].[Person] p1
+           CROSS JOIN
+           [Person].[Person] p2
+3) The use of the WITH expression is allowed within 
+the scope of a single SELECT, INSERT, UPDATE, DELETE, 
+or MERGE statement.
+The first difference between using WITH and a subquery is that 
+a generalized tabular expression can include references to itself. 
+The WITH construction allows to create complex queries 
+and multiple levels. WITH is declared as a variable at the beginning 
+and allows to refer to yourself throughout the query later.
