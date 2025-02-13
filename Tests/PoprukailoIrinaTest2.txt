@@ -29,4 +29,4 @@ ORDER BY [StandardCost] DESC
 3.SELECT *
 FROM (SELECT [Name], [StandardCost], RANK() OVER (ORDER BY [StandardCost] DESC) AS ProdRank
       FROM [Production].[Product]) AS MostExpens
-WHERE ProdRank=1
+WHERE MostExpens.ProdRank=1
