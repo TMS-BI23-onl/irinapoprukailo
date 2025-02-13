@@ -17,7 +17,7 @@ WHERE pp.PhoneNumber LIKE '4%5'
 FROM [HumanResources].[Employee]
 
 3) 
-1. SELECT [Name], [StandardCost]
+1. SELECT [Name], [StandardCost], [Color]
 FROM [Production].[Product]
 WHERE [StandardCost] = (SELECT MAX([StandardCost])
                         FROM [Production].[Product])
@@ -27,6 +27,6 @@ FROM [Production].[Product]
 ORDER BY [StandardCost] DESC
 
 3.SELECT *
-FROM (SELECT [Name], [StandardCost], RANK() OVER (ORDER BY [StandardCost] DESC) AS ProdRank
+FROM (SELECT [Name], [StandardCost], RANK() OVER (PARTITION BY [Color] ORDER BY [StandardCost] DESC) AS ProdRank
       FROM [Production].[Product]) AS MostExpens
 WHERE MostExpens.ProdRank=1
