@@ -20,7 +20,8 @@ FROM [HumanResources].[Employee]
 1. SELECT [Name], [StandardCost], [Color]
 FROM [Production].[Product]
 WHERE [StandardCost] = (SELECT MAX([StandardCost])
-                        FROM [Production].[Product])
+                        FROM [Production].[Product]
+                        GROUP BY Color)
 
 2.SELECT TOP 1 WITH TIES [Name], [StandardCost]
 FROM [Production].[Product]
