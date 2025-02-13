@@ -1,0 +1,32 @@
+1) SELECT p.[Name], pp.[PhoneNumber], LEFT(pp.[PhoneNumber],3)AS CityCode
+   FROM Person.[Person] p
+   JOIN Person.[PersonPhone] pp ON p.[PersonID]=pp.[PersonID]
+WHERE pp.PhoneNumber LIKE '4%5'
+
+2) SELECT [Name],
+          CASE WHEN [Age] BETWEEN 17 AND 20
+		          THEN 'Adolescence'
+	       WHEN [Age] BETWEEN 21 AND 59
+			      THEN 'Adults'
+	       WHEN [Age] BETWEEN 60 AND 75
+			      THEN 'Elderly'
+	       WHEN [Age] BETWEEN 76 AND 90
+			      THEN 'Senile'
+               ELSE 'Unsuitable age category'
+	  END AS AgeCategory
+FROM [HumanResources].[Employee]
+
+3) 
+1. SELECT [Name], [StandardCost]
+FROM [Production].[Product]
+WHERE [StandardCost] = (SELECT MAX([StandardCost])
+                        FROM [Production].[Product])
+
+2.SELECT TOP 1 WITH TIES [Name], [StandardCost]
+FROM [Production].[Product]
+ORDER BY [StandardCost] DESC
+
+3.SELECT *
+FROM (SELECT [Name], [StandardCost], RANK() OVER (ORDER BY [StandardCost] DESC) AS ProdRank
+      FROM [Production].[Product]) MostExpens
+WHERE ProdRank=1
