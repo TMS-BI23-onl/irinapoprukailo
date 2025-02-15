@@ -1,0 +1,10 @@
+3.
+SELECT 
+    CONCAT(p.FirstName, ' ', p.LastName) AS FullName,
+    CONCAT(f.FirstName, ' ', f.LastName) AS FatherFullName
+FROM 
+    People p
+SELF JOIN 
+    People f ON p.ID_Father = f.ID
+WHERE 
+    p.FirstName = 'Дмитрий'
