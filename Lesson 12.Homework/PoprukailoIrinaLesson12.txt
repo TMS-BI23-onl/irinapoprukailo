@@ -1,0 +1,40 @@
+Task 0.3.
+1st query
+SELECT *
+FROM (SELECT [Name], [Color],[StandardCost], RANK() OVER (PARTITION BY [Color] ORDER BY [StandardCost] DESC) AS ProdRank
+      FROM [Production].[Product]) AS MostExpens
+WHERE MostExpens.ProdRank=1
+      AND Color IS NOT NULL
+
+2nd, 3rd: query couldn't find the correct way to insert the color condition.
+
+Task 0.4
+1) Exhibits (ExhibitID, Name, Artist, CreationYear)
+2) Events (EventID, Name, StartDate, EndDate, Price, Location)
+3) Employees (EmployeeID, FirstName, LastName, Gender, Department, Position, DateEmployment, Salary, Email)
+4) Visitors (VisitorID, FirstName, LastName,Gender, DateOfBirth, Email)
+5) Souvenirs (ProductID, ProductType, Name, Price)
+6) Tickets (TicketID, Type, Price)
+7) Trasactions (TrasactionID, ProductID, EventID, TicketID, VisitorID, Date)
+
+1) Вывести сколько детей  за текущий год посетило музей выставки, которые проводились в весенний и летние периоды.
+2) Указать, какая аудитория (взрослые, подростки, дети) занимала первое место по количеству проданных билетов на 
+каждой выставке, проводившейся за последние 3 года.
+
+Task 3.
+SELECT Year, 
+       ISNULL([1], 0) AS January,
+       ISNULL([2], 0) AS February, 
+	   ISNULL([12], 0) AS December
+FROM 
+ (SELECT [OrderQty], 
+         DATEPART(YEAR, [EndDate]) AS Year,
+	     DATEPART(MONTH, [EndDate]) AS Month
+  FROM [Production].[WorkOrder]
+      WHERE DATEPART(MONTH,[EndDate]) IN (1,2,12))AS SourceTable
+PIVOT 
+      (SUM (OrderQty) FOR Month IN ([1], [2], [12])
+) AS PivotTable
+ORDER BY Year
+
+Task 4. Haven't found the solution.
