@@ -6,7 +6,17 @@ FROM (SELECT [Name], [Color],[StandardCost], RANK() OVER (PARTITION BY [Color] O
 WHERE MostExpens.ProdRank=1
       AND Color IS NOT NULL
 
-2nd, 3rd: query couldn't find the correct way to insert the color condition.
+2nd query
+SELECT p.[Name], p.[StandardCost], p.[Color]
+FROM [Production].[Product] p
+JOIN (
+    SELECT Color, MAX(StandardCost) AS MaxPrice
+    FROM [Production].[Product]
+    GROUP BY Color) 
+	AS color_max_prices 
+ON p.Color = color_max_prices.Color AND p.StandardCost = color_max_prices.MaxPrice 
+
+3rd: query couldn't find the correct way to insert the color condition.
 
 Task 0.4
 1) Exhibits (ExhibitID, Name, Artist, CreationYear)
