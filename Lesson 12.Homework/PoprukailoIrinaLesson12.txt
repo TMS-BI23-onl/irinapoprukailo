@@ -16,7 +16,14 @@ JOIN (
 	AS color_max_prices 
 ON p.Color = color_max_prices.Color AND p.StandardCost = color_max_prices.MaxPrice 
 
-3rd: query couldn't find the correct way to insert the color condition.
+3rd query
+SELECT p.[Name], p.[StandardCost], p.[Color]
+FROM [Production].[Product] p
+WHERE p.StandardCost = (
+    SELECT MAX(StandardCost)
+    FROM [Production].[Product]
+    WHERE Color = p.Color
+)
 
 Task 0.4
 1) Exhibits (ExhibitID, Name, Artist, CreationYear)
