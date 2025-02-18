@@ -1,0 +1,5 @@
+Well done!
+
+Great job on Task 0.3!!!!!
+
+Your MERGE works just as an insert, it's not really what I was looking for.
