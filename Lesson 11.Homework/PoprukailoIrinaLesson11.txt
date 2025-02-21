@@ -1,4 +1,4 @@
-3.
+2.
 SELECT 
     CONCAT(p.FirstName, ' ', p.LastName) AS FullName,
     CONCAT(f.FirstName, ' ', f.LastName) AS FatherFullName
@@ -8,3 +8,36 @@ SELF JOIN
     People f ON p.ID_Father = f.ID
 WHERE 
     p.FirstName = 'Дмитрий'
+
+3. 
+CREATE TABLE TeamsDub(
+	team_id	int identity,
+	team_name	varchar(20),
+	team_code	char(3),
+	main_sponsor	nvarchar(30),
+	director_name	nvarchar(30)
+)
+
+INSERT INTO TeamsDub (team_name, team_code, main_sponsor, director_name)
+VALUES
+('Ferrari', 'FER', 'HP', 'Fred Vasseur'),
+('Aston Martin', 'AMR', 'Aramco', 'Lawrence Stroll'),
+('McLaren', 'MCL', 'OKX', 'Andrea Stella'),
+('Red Bull Racing', 'RBR', 'Oracle', 'Dr Marco'),
+('Mercedes AMG','AMG','Petronas','Toto Wolff')
+
+MERGE [dbo].[Teams] target
+USING [dbo].[TeamsDub] source ON target.team_id=source.team_id
+
+WHEN MATCHED AND (target.team_name !=source.team_name OR target.team_code !=source.team_code
+                  OR target.main_sponsor !=source.main_sponsor OR target.director_name !=source.director_name)
+	THEN UPDATE SET target.team_name =source.team_name,
+					target.team_code =source.team_code,
+					target.main_sponsor =source.main_sponsor,
+					target.director_name =source.director_name
+WHEN NOT MATCHED BY TARGET
+	THEN INSERT (team_name, team_code, main_sponsor, director_name)
+	VALUES (source.team_name, source.team_code, source.main_sponsor, source.director_name)
+WHEN NOT MATCHED BY SOURCE
+	THEN DELETE 
+	;
