@@ -94,3 +94,94 @@ WHEN NOT MATCHED THEN
 SELECT *
 FROM [dbo].[FunctionUsage]
 ORDER BY [Function_count] DESC
+
+CREATE TABLE FunctionUsage (
+    Function_name NVARCHAR(100),
+    Function_count INT
+	)
+
+SELECT * FROM [dbo].[Lesson12]
+
+MERGE INTO FunctionUsage AS target
+USING (SELECT Alex FROM [dbo].[Lesson12]
+WHERE Alex IS NOT NULL) AS source ON target.Function_name = source.Alex
+WHEN MATCHED THEN
+    UPDATE SET Function_count = target.Function_count + 1
+WHEN NOT MATCHED THEN
+    INSERT (Function_name, Function_count)
+    VALUES (source.Alex, 1);
+
+MERGE INTO FunctionUsage AS target
+USING (SELECT Carlos FROM [dbo].[Lesson12]
+WHERE Carlos IS NOT NULL) AS source ON target.Function_name = source.Carlos
+WHEN MATCHED THEN
+    UPDATE SET Function_count = target.Function_count + 1
+WHEN NOT MATCHED THEN
+    INSERT (Function_name, Function_count)
+    VALUES (source.Carlos, 1);
+
+MERGE INTO FunctionUsage AS target
+USING (SELECT Charles FROM [dbo].[Lesson12]
+WHERE Charles IS NOT NULL) AS source ON target.Function_name = source.Charles
+WHEN MATCHED THEN
+    UPDATE SET Function_count = target.Function_count + 1
+WHEN NOT MATCHED THEN
+    INSERT (Function_name, Function_count)
+    VALUES (source.Charles, 1);
+
+MERGE INTO FunctionUsage AS target
+USING (SELECT Daniel FROM [dbo].[Lesson12]
+WHERE Daniel IS NOT NULL) AS source ON target.Function_name = source.Daniel
+WHEN MATCHED THEN
+    UPDATE SET Function_count = target.Function_count + 1
+WHEN NOT MATCHED THEN
+    INSERT (Function_name, Function_count)
+    VALUES (source.Daniel, 1);
+
+MERGE INTO FunctionUsage AS target
+USING (SELECT Esteban FROM [dbo].[Lesson12]
+WHERE Esteban IS NOT NULL) AS source ON target.Function_name = source.Esteban
+WHEN MATCHED THEN
+    UPDATE SET Function_count = target.Function_count + 1
+WHEN NOT MATCHED THEN
+    INSERT (Function_name, Function_count)
+    VALUES (source.Esteban, 1);
+
+MERGE INTO FunctionUsage AS target
+USING (SELECT Fred FROM [dbo].[Lesson12]
+WHERE Fred IS NOT NULL) AS source ON target.Function_name = source.Fred
+WHEN MATCHED THEN
+    UPDATE SET Function_count = target.Function_count + 1
+WHEN NOT MATCHED THEN
+    INSERT (Function_name, Function_count)
+    VALUES (source.Fred, 1);
+
+MERGE INTO FunctionUsage AS target
+USING (SELECT George FROM [dbo].[Lesson12]
+WHERE George IS NOT NULL) AS source ON target.Function_name = source.George
+WHEN MATCHED THEN
+    UPDATE SET Function_count = target.Function_count + 1
+WHEN NOT MATCHED THEN
+    INSERT (Function_name, Function_count)
+    VALUES (source.George, 1);
+
+MERGE INTO FunctionUsage AS target
+USING (SELECT Lando FROM [dbo].[Lesson12]
+WHERE Lando IS NOT NULL) AS source ON target.Function_name = source.Lando
+WHEN MATCHED THEN
+    UPDATE SET Function_count = target.Function_count + 1
+WHEN NOT MATCHED THEN
+    INSERT (Function_name, Function_count)
+    VALUES (source.Lando, 1);
+
+MERGE INTO FunctionUsage AS target
+USING (SELECT Lewis FROM [dbo].[Lesson12]
+WHERE Lewis IS NOT NULL) AS source ON target.Function_name = source.Lewis
+WHEN MATCHED THEN
+    UPDATE SET Function_count = target.Function_count + 1
+WHEN NOT MATCHED THEN
+    INSERT (Function_name, Function_count)
+    VALUES (source.Lewis, 1);
+
+SELECT * FROM [dbo].[FunctionUsage]
+ORDER BY Function_count DESC
