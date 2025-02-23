@@ -1,0 +1,32 @@
+1.
+1) Необходимо узнать по каким маршрутам, отправляющимся в марте, 
+остались свободные места и сколько этих мест.
+
+SELECT м.id мартшрута, (а.кол-во мест - SUM(пб.кол-во билетов) AS своб-ые места 
+FROM Маршруты м
+JOIN пб.Продажа билетов ON м.id маршрута = пб.id маршрута
+JOIN Автобусы а ON пб.id_автобуса=а.id_автобуса
+WHERE MONTH(m.дата отправления)=3
+GROUP BY м.id маршрута
+HAVING (а.кол-во мест - SUM(пб.кол-во билетов) > 0
+
+2) Необходимо узнать выручку по каждому маршруту за каждый год суммарно. 
+Результаты вывести в виде транспонированной таблицы.
+
+SELECT *
+FROM
+(SELECT м.id маршрута,
+       YEAR (м.дата покупки) AS год,
+       SUM (м.цена билета * пб.кол-во билетов) AS выручка
+FROM Продажа билетов пб
+JOIN Маршруты м ON м.id маршрута = пб.id маршрута
+GROUP BY м.id маршрута, YEAR (м.дата покупки)
+) AS SourceTable
+PIVOT (
+       SUM (выручка) FOR год IN ([2020],[2021],[2023],[2024])
+       ) AS PivotTable
+ORDER BY [id маршрута]
+2. Attached.
+3. AdventureWorks2017 is the OLTP type and AdventureWorksDW2017 is the data warehouse.
+AdventureWorksDW2017 is better to work with reports because data Warehouse, 
+unlike OLTP systems, use denormalization, what allows faster access to the necessary data.
