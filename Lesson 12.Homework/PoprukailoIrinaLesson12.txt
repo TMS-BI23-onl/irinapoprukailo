@@ -95,6 +95,7 @@ SELECT *
 FROM [dbo].[FunctionUsage]
 ORDER BY [Function_count] DESC
 
+2nd trial
 CREATE TABLE FunctionUsage (
     Function_name NVARCHAR(100),
     Function_count INT
