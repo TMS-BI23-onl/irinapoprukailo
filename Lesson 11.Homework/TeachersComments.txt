@@ -1,5 +1,3 @@
 Well done!
 
-Your solution won't work because of word "self". It's not needed here.
-
-Where's MERGE?
+No negative comments, great job!
