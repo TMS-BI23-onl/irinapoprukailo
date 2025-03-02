@@ -1,0 +1,24 @@
+1.
+CREATE VIEW Top50Employees AS
+SELECT TOP 50 
+       e.[ID_employee], 
+       e.[FirstName], 
+	   e.[LastName],
+	   SUM (CASE WHEN DailyOrders.OrderCount > 10 THEN 3
+	             WHEN DailyOrders.OrderCount BETWEEN 5 AND 10 THEN 2
+				 ELSE 1
+				 END) AS Score
+FROM [dbo].[Employees_dim] e
+JOIN (SELECT [ID_employee], [StartDate] AS OrderDate,COUNT(*) AS OrderCount
+      FROM [dbo].[Orders_fct]
+      GROUP BY [ID_employee], [StartDate]) AS DailyOrders 
+ON DailyOrders.[ID_employee] = e.[ID_employee]
+GROUP BY e.[ID_employee], e.[FirstName],e.[LastName] 
+ORDER BY Score DESC
+
+2. a) Remove the external background and graph background, shadows, column stroke, 
+ no need for external signatures, as there are along the horizontal axis, add column values.
+   b) Change the chart type to columns. Don't use 3D models.
+   c) Change the name of the graph, move the name of the horizontal axis down, 
+ make the column names in horizontal orientation, as space allows, 
+ or reduce the width of the graph, add column values.
