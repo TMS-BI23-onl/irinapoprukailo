@@ -1,0 +1,67 @@
+1) Покажите всех менеджеров, которые имеют в подчинении больше 
+6-ти сотрудников.
+
+SELECT e.Manager_ID, COUNT(e.Employee_ID) AS EmployeeCnt
+FROM Employees e
+JOIN Employees m ON e.Manager_ID = m.Employee_ID
+GROUP BY e.Manager_ID
+HAVING COUNT(e.Employee_ID) > 6
+ORDER BY EmployeeCnt DESC
+
+2)Вывести min и max зарплату с вычетом commission_pct 
+для каждого департамента. (commission_pct на базе указывается в процентах).
+
+SELECT d.Department_ID,d.Department_Name,
+    MIN(e.Salary * (1 - e.Commission_Pct/100)) AS MinSalary,
+    MAX(e.Salary * (1 - e.Commission_Pct/100)) AS MaxSalary
+FROM Departments d
+LEFT JOIN 
+    Employees e ON d.Department_ID = e.Department_ID
+GROUP BY d.Department_ID, d.Department_Name
+ORDER BY d.Department_ID
+
+3) Вывести только регион, где работают больше всего людей.
+
+SELECT TOP 1 r.Region_Name
+FROM Regions r  
+JOIN Countries c ON c.Region_ID = c.Region_ID
+JOIN Locations l ON l.Country_ID = c.Country_ID
+JOIN Departments d ON d.Location_ID = l.Location_ID
+JOIN Employees e ON e.DepartmentID = d.DepartmentID
+GROUP BY r.RegionName
+ORDER BY COUNT(e.EmployeeID) DESC
+
+4) Найдите разницу в процентах между средней зп по каждому департаменту 
+от общей средней (по всем департаментам).
+
+SELECT d.Department_Name, 
+       AVG(e.Salary) AS AvgDept, 
+       (SELECT AVG(e.Salary) AS AvgAll
+               FROM Employees),
+       ((AvgDept-AvgAll)/AvgAll) * 100 AS Pct
+FROM Departments d
+LEFT JOIN Employees e ON d.DepartmentID = e.DepartmentID 
+
+5) Найдите людей, кто проработал больше, чем 10 лет в одном департаменте.
+
+WITH ExperienceInDepartment AS
+    (SELECT e.Employee_ID, e.First_Name, e.Last_Name, jh.Department_ID,
+            SUM(DATEDIFF(YEAR, jh.Start_Date, jh.End_Date)) AS Experience
+    FROM Employees e
+    JOIN Job_History jh ON e.Employee_ID = jh.Employee_ID
+    GROUP BY e.Employee_ID, e.First_Name, e.Last_Name, jh.Department_ID)
+
+SELECT Employee_ID, First_Name, Last_Name, Departmen_tID, Experience
+FROM ExperienceInDepartment
+WHERE Experience > 10
+ORDER BY Experience DESC
+
+6) Найдите людей, кто занимает 5-10 место по размеру зарплаты.
+
+SELECT Employee_ID, First_Name, Last_Name, Salary
+FROM (  
+       SELECT Employee_ID, First_Name, Last_Name, Salary,
+              RANK() OVER (ORDER BY Salary DESC) AS SalaryRnk
+       FROM Employees) as Rating
+WHERE SalaryRnk BETWEEN 5 AND 10
+ORDER BY SalaryRnk
